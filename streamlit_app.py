@@ -18,7 +18,6 @@ if menu == "Aggiungi oggetto":
         data_r = st.date_input("Data di ritrovamento", value=date.today())
         ora_r = st.time_input("Ora di ritrovamento", value=datetime.now().time())
         stato = st.selectbox("Stato notifica", ["non_avvisato", "avvisato"])
-        giorni = st.number_input("Giorni alla scadenza", min_value=1, max_value=365, value=30)
         utente = st.text_input("Utente")
         foto = st.file_uploader("Foto", type=["jpg", "jpeg", "png"])
         submit = st.form_submit_button("Salva")
@@ -30,12 +29,13 @@ if menu == "Aggiungi oggetto":
                 foto_path = os.path.join(upload_dir, foto.name)
                 with open(foto_path, "wb") as f:
                     f.write(foto.read())
+            giorni_scadenza = 30 if stato == "avvisato" else 90
             item = utils.aggiungi_oggetto(
                 villa=villa,
                 data_ritrovamento=data_r.strftime("%Y-%m-%d"),
                 ora_ritrovamento=ora_r.strftime("%H:%M"),
                 stato_notifica=stato,
-                giorni_scadenza=int(giorni),
+                giorni_scadenza=giorni_scadenza,
                 utente=utente,
                 foto=foto_path,
             )
