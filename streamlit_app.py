@@ -18,7 +18,7 @@ if menu == "Aggiungi oggetto":
         data_r = st.date_input("Data di ritrovamento", value=date.today())
         ora_r = st.time_input("Ora di ritrovamento", value=datetime.now().time())
         stato = st.selectbox("Stato notifica", ["non_avvisato", "avvisato"])
-        utente = st.text_input("Utente")
+        proprietario = st.text_input("Proprietario (nome e cognome)")
         foto = st.file_uploader("Foto", type=["jpg", "jpeg", "png"])
         submit = st.form_submit_button("Salva")
         if submit:
@@ -36,14 +36,14 @@ if menu == "Aggiungi oggetto":
                 ora_ritrovamento=ora_r.strftime("%H:%M"),
                 stato_notifica=stato,
                 giorni_scadenza=giorni_scadenza,
-                utente=utente,
+                proprietario=proprietario,
                 foto=foto_path,
             )
             st.success(f"Oggetto aggiunto con ID {item['id']}")
 
 else:
     st.header("Oggetti presenti")
-    query = st.text_input("Cerca per ID, villa o utente")
+    query = st.text_input("Cerca per ID, villa o proprietario")
     try:
         with open(utils.LOST_ITEMS_FILE, "r", encoding="utf-8") as f:
             items = json.load(f)
@@ -51,7 +51,7 @@ else:
         items = []
     if query:
         q = query.lower()
-        items = [i for i in items if q in i["id"].lower() or q in i["villa"].lower() or (i.get("utente") and q in i["utente"].lower())]
+        items = [i for i in items if q in i["id"].lower() or q in i["villa"].lower() or (i.get("proprietario") and q in i["proprietario"].lower())]
     if items:
         st.dataframe(items)
     else:
