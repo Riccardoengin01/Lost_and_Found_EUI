@@ -17,12 +17,14 @@ VS, BF, BT, VF e LP.
 from lost_and_found import utils
 
 # Aggiungi un oggetto
+stato = "avvisato"  # oppure "non_avvisato"
 utils.aggiungi_oggetto(
     villa="VS",
     data_ritrovamento="2025-01-01",
     ora_ritrovamento="10:00",
-    stato_notifica="non_avvisato",
-    giorni_scadenza=30,
+    stato_notifica=stato,
+    # 30 giorni se avvisato, altrimenti 90
+    giorni_scadenza=30 if stato == "avvisato" else 90,
     utente="Mario Rossi",
     foto="/percorso/alla/foto.jpg"
 )
