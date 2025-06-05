@@ -52,7 +52,7 @@ def salva_immagine(path_foto):
 
 
 def aggiungi_oggetto(villa, data_ritrovamento, ora_ritrovamento,
-                     stato_notifica, giorni_scadenza=30, utente=None,
+                     stato_notifica, giorni_scadenza=30, proprietario=None,
                      foto=None, logo=None):
     items = _load_json(LOST_ITEMS_FILE)
     item_id = _next_id(villa, items)
@@ -66,7 +66,7 @@ def aggiungi_oggetto(villa, data_ritrovamento, ora_ritrovamento,
         'ora_ritrovamento': ora_ritrovamento,
         'stato_notifica': stato_notifica,
         'data_scadenza': scadenza,
-        'utente': utente,
+        'proprietario': proprietario,
         'ritirato': False,
         'data_ritiro': None,
         'foto': foto_path,

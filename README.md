@@ -25,7 +25,7 @@ utils.aggiungi_oggetto(
     stato_notifica=stato,
     # 30 giorni se avvisato, altrimenti 90
     giorni_scadenza=30 if stato == "avvisato" else 90,
-    utente="Mario Rossi",
+    proprietario="Mario Rossi",
     foto="/percorso/alla/foto.jpg"
 )
 
