@@ -9,7 +9,13 @@ FOTO_DIR = os.path.join(os.path.dirname(__file__), 'foto')
 LOST_ITEMS_FILE = os.path.join(DATA_DIR, 'lost_items.json')
 ARCHIVE_FILE = os.path.join(DATA_DIR, 'archivio.json')
 
-UFFICI = [f"UFFICIO_{i}" for i in range(1, 6)]
+# Uffici di raccolta presenti al campus
+# VS - Villa Schifanoia
+# BF - Badia Fiesolana
+# BT - Buontalenti
+# VF - Villa La Fonte
+# LP - Villa Il Poggiolo
+UFFICI = ["VS", "BF", "BT", "VF", "LP"]
 
 
 def _load_json(path):
