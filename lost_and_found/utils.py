@@ -3,6 +3,7 @@ import json
 import os
 import shutil
 from datetime import datetime, timedelta
+import uuid
 
 DATA_DIR = os.path.join(os.path.dirname(__file__), 'data')
 FOTO_DIR = os.path.join(os.path.dirname(__file__), 'foto')
@@ -97,8 +98,9 @@ def salva_immagine(path_foto):
         return None
     if not os.path.exists(FOTO_DIR):
         os.makedirs(FOTO_DIR, exist_ok=True)
-    filename = os.path.basename(path_foto)
-    dest_path = os.path.join(FOTO_DIR, filename)
+    ext = os.path.splitext(os.path.basename(path_foto))[1]
+    unique_name = f"{uuid.uuid4().hex}{ext}"
+    dest_path = os.path.join(FOTO_DIR, unique_name)
     shutil.copy(path_foto, dest_path)
     return dest_path
 
