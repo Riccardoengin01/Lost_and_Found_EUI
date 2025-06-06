@@ -9,6 +9,8 @@ VS, BF, BT, VF e LP.
 - Segna un oggetto come ritirato specificando chi lo ha prelevato
 - Archivia automaticamente gli oggetti scaduti in base alla loro data di
   scadenza
+- Gli oggetti archiviati per scadenza vengono contrassegnati come
+  "smaltiti" per distinguerli da quelli ritirati
 - Gestione delle foto
 - Script di schedulazione quotidiana per l'archiviazione
 - Ricerca e consultazione dell'archivio dalla voce "Archivio"
@@ -47,6 +49,9 @@ utils.ritiro_oggetto("001-VS", "2025-01-15", "proprietario")
 # Archivia scaduti
 utils.archivia_scaduti()
 ```
+
+Gli oggetti scaduti vengono aggiunti all'archivio con il campo
+`smaltito: true` per distinguerli da quelli ritirati.
 
 Per eseguire l'archiviazione giornaliera si può usare `daily_archive.py` con `schedule` o `cron`.
 
