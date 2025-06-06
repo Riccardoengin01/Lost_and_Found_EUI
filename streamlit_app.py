@@ -63,11 +63,11 @@ elif menu == "Lista oggetti":
                 "proprietario": i.get("proprietario"),
                 "ritirato": i.get("ritirato"),
                 "archiviato": i.get("archiviato"),
-                "photo link": i.get("foto"),
+                "foto": f"[link]({i['foto']})" if i.get("foto") else "",
             }
             for i in items
         ])
-        st.dataframe(df)
+        st.markdown(df.to_markdown(index=False), unsafe_allow_html=True)
     else:
         st.write("Nessun oggetto trovato")
 
@@ -108,10 +108,10 @@ else:
                 "proprietario": i.get("proprietario"),
                 "ritirato": i.get("ritirato"),
                 "archiviato": i.get("archiviato"),
-                "photo link": i.get("foto"),
+                "foto": f"[link]({i['foto']})" if i.get("foto") else "",
             }
             for i in items
         ])
-        st.dataframe(df)
+        st.markdown(df.to_markdown(index=False), unsafe_allow_html=True)
     else:
         st.write("Nessun oggetto archiviato trovato")
