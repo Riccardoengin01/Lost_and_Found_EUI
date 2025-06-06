@@ -8,7 +8,7 @@ st.title("Lost & Found - EUI")
 
 menu = st.sidebar.radio(
     "Seleziona sezione",
-    ("Aggiungi oggetto", "Lista oggetti")
+    ("Aggiungi oggetto", "Lista oggetti", "Archivio")
 )
 
 if menu == "Aggiungi oggetto":
@@ -41,7 +41,7 @@ if menu == "Aggiungi oggetto":
             )
             st.success(f"Oggetto aggiunto con ID {item['id']}")
 
-else:
+elif menu == "Lista oggetti":
     st.header("Oggetti presenti")
     query = st.text_input("Cerca per ID, villa o proprietario")
     try:
@@ -72,3 +72,19 @@ else:
     if st.button("Archivia oggetti scaduti"):
         n = utils.archivia_scaduti()
         st.write(f"Oggetti archiviati: {n}")
+
+else:
+    st.header("Archivio")
+    query = st.text_input("Cerca per ID, villa o proprietario", key="archivio_query")
+    try:
+        with open(utils.ARCHIVE_FILE, "r", encoding="utf-8") as f:
+            items = json.load(f)
+    except Exception:
+        items = []
+    if query:
+        q = query.lower()
+        items = [i for i in items if q in i["id"].lower() or q in i["villa"].lower() or (i.get("proprietario") and q in i["proprietario"].lower())]
+    if items:
+        st.dataframe(items)
+    else:
+        st.write("Nessun oggetto archiviato trovato")
