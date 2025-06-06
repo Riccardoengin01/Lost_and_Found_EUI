@@ -1,6 +1,7 @@
 import os
 import json
 from datetime import datetime, date
+import pandas as pd
 import streamlit as st
 from lost_and_found import utils
 
@@ -53,7 +54,20 @@ elif menu == "Lista oggetti":
         q = query.lower()
         items = [i for i in items if q in i["id"].lower() or q in i["villa"].lower() or (i.get("proprietario") and q in i["proprietario"].lower())]
     if items:
-        st.dataframe(items)
+        df = pd.DataFrame([
+            {
+                "ID": i["id"],
+                "villa": i["villa"],
+                "data/ora ritrovamento": f"{i['data_ritrovamento']} {i['ora_ritrovamento']}",
+                "stato_notifica": i["stato_notifica"],
+                "proprietario": i.get("proprietario"),
+                "ritirato": i.get("ritirato"),
+                "archiviato": i.get("archiviato"),
+                "photo link": i.get("foto"),
+            }
+            for i in items
+        ])
+        st.dataframe(df)
     else:
         st.write("Nessun oggetto trovato")
 
@@ -85,6 +99,19 @@ else:
         q = query.lower()
         items = [i for i in items if q in i["id"].lower() or q in i["villa"].lower() or (i.get("proprietario") and q in i["proprietario"].lower())]
     if items:
-        st.dataframe(items)
+        df = pd.DataFrame([
+            {
+                "ID": i["id"],
+                "villa": i["villa"],
+                "data/ora ritrovamento": f"{i['data_ritrovamento']} {i['ora_ritrovamento']}",
+                "stato_notifica": i["stato_notifica"],
+                "proprietario": i.get("proprietario"),
+                "ritirato": i.get("ritirato"),
+                "archiviato": i.get("archiviato"),
+                "photo link": i.get("foto"),
+            }
+            for i in items
+        ])
+        st.dataframe(df)
     else:
         st.write("Nessun oggetto archiviato trovato")
