@@ -88,6 +88,17 @@ elif menu == "Lista oggetti":
             else:
                 st.error("ID non trovato")
 
+    st.subheader("Archivia manualmente")
+    with st.form("archivia"):
+        id_archivia = st.text_input("ID oggetto", key="archivia_id")
+        submit_a = st.form_submit_button("Archivia")
+        if submit_a and id_archivia:
+            item = utils.archivia_oggetto(id_archivia)
+            if item:
+                st.success("Oggetto archiviato")
+            else:
+                st.error("ID non trovato")
+
     if st.button("Archivia oggetti scaduti"):
         n = utils.archivia_scaduti()
         st.write(f"Oggetti archiviati: {n}")
