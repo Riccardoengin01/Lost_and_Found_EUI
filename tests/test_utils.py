@@ -25,6 +25,20 @@ def setup_temp_env(tmp_path, monkeypatch):
     return data_dir, foto_dir
 
 
+def setup_env_no_dirs(tmp_path, monkeypatch):
+    data_dir = tmp_path / "data"
+    foto_dir = tmp_path / "foto"
+    # Avoid salvataggio CSV per non alterare i tipi
+    monkeypatch.setattr(utils, "_save_csv", lambda *a, **k: None)
+    monkeypatch.setattr(utils, "DATA_DIR", str(data_dir))
+    monkeypatch.setattr(utils, "FOTO_DIR", str(foto_dir))
+    monkeypatch.setattr(utils, "LOST_ITEMS_FILE", str(data_dir / "lost_items.json"))
+    monkeypatch.setattr(utils, "ARCHIVE_FILE", str(data_dir / "archivio.json"))
+    monkeypatch.setattr(utils, "LOST_ITEMS_CSV", str(data_dir / "oggetti_attivi.csv"))
+    monkeypatch.setattr(utils, "ARCHIVE_CSV", str(data_dir / "archivio.csv"))
+    return data_dir, foto_dir
+
+
 def load_json(path):
     if not os.path.exists(path):
         return []
@@ -110,3 +124,18 @@ def test_archivia_scaduti(tmp_path, monkeypatch):
     assert len(lost) == 1
     assert len(archive) == 1
     assert archive[0]["smaltito"] is True
+
+
+def test_auto_directory_creation(tmp_path, monkeypatch):
+    data_dir, _ = setup_env_no_dirs(tmp_path, monkeypatch)
+
+    utils.aggiungi_oggetto(
+        villa="VS",
+        data_ritrovamento="2025-01-01",
+        ora_ritrovamento="10:00",
+        stato_notifica="avvisato",
+    )
+
+    assert os.path.isdir(data_dir)
+    saved = load_json(os.path.join(data_dir, "lost_items.json"))
+    assert len(saved) == 1
