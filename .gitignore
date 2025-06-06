@@ -1,3 +1,5 @@
 __pycache__/
 *.pyc
 uploads/
+lost_and_found/data/*.json
+lost_and_found/data/*.csv
