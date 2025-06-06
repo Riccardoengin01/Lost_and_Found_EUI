@@ -1,3 +1,4 @@
+import csv
 import json
 import os
 import shutil
@@ -8,6 +9,8 @@ FOTO_DIR = os.path.join(os.path.dirname(__file__), 'foto')
 
 LOST_ITEMS_FILE = os.path.join(DATA_DIR, 'lost_items.json')
 ARCHIVE_FILE = os.path.join(DATA_DIR, 'archivio.json')
+LOST_ITEMS_CSV = os.path.join(DATA_DIR, 'oggetti_attivi.csv')
+ARCHIVE_CSV = os.path.join(DATA_DIR, 'archivio.csv')
 
 # Uffici di raccolta presenti al campus
 # VS - Villa Schifanoia
@@ -33,6 +36,52 @@ def _save_json(path, data):
         json.dump(data, f, indent=2, ensure_ascii=False)
 
 
+CSV_FIELDS = [
+    'id',
+    'villa',
+    'data_ritrovamento',
+    'ora_ritrovamento',
+    'stato_notifica',
+    'data_scadenza',
+    'proprietario',
+    'ritirato',
+    'data_ritiro',
+    'ritirato_da',
+    'smaltito',
+    'archiviato',
+    'foto',
+    'logo',
+]
+
+
+def _load_csv(path):
+    if not os.path.exists(path):
+        return []
+    with open(path, newline='', encoding='utf-8') as f:
+        reader = csv.DictReader(f)
+        return [dict(row) for row in reader]
+
+
+def _save_csv(path, data):
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    with open(path, 'w', newline='', encoding='utf-8') as f:
+        writer = csv.DictWriter(f, fieldnames=CSV_FIELDS)
+        writer.writeheader()
+        for item in data:
+            writer.writerow({k: item.get(k, '') for k in CSV_FIELDS})
+
+
+def _load_data(json_path, csv_path):
+    if os.path.exists(csv_path):
+        return _load_csv(csv_path)
+    return _load_json(json_path)
+
+
+def _save_data(json_path, csv_path, data):
+    _save_json(json_path, data)
+    _save_csv(csv_path, data)
+
+
 def _next_id(villa, items):
     prefix = villa
     numbers = [int(item['id'].split('-')[0]) for item in items if item['villa'] == villa]
@@ -54,7 +103,7 @@ def salva_immagine(path_foto):
 def aggiungi_oggetto(villa, data_ritrovamento, ora_ritrovamento,
                      stato_notifica, giorni_scadenza=30, proprietario=None,
                      foto=None, logo=None):
-    items = _load_json(LOST_ITEMS_FILE)
+    items = _load_data(LOST_ITEMS_FILE, LOST_ITEMS_CSV)
     item_id = _next_id(villa, items)
     scadenza = (datetime.strptime(data_ritrovamento, '%Y-%m-%d') +
                 timedelta(days=giorni_scadenza)).strftime('%Y-%m-%d')
@@ -76,13 +125,13 @@ def aggiungi_oggetto(villa, data_ritrovamento, ora_ritrovamento,
         'logo': logo
     }
     items.append(item)
-    _save_json(LOST_ITEMS_FILE, items)
+    _save_data(LOST_ITEMS_FILE, LOST_ITEMS_CSV, items)
     return item
 
 
 def ritiro_oggetto(id_oggetto, data_ritiro, ritirato_da):
-    items = _load_json(LOST_ITEMS_FILE)
-    archive = _load_json(ARCHIVE_FILE)
+    items = _load_data(LOST_ITEMS_FILE, LOST_ITEMS_CSV)
+    archive = _load_data(ARCHIVE_FILE, ARCHIVE_CSV)
     remaining = []
     found_item = None
     for item in items:
@@ -97,14 +146,14 @@ def ritiro_oggetto(id_oggetto, data_ritiro, ritirato_da):
             remaining.append(item)
     if found_item is None:
         return None
-    _save_json(ARCHIVE_FILE, archive)
-    _save_json(LOST_ITEMS_FILE, remaining)
+    _save_data(ARCHIVE_FILE, ARCHIVE_CSV, archive)
+    _save_data(LOST_ITEMS_FILE, LOST_ITEMS_CSV, remaining)
     return found_item
 
 
 def archivia_scaduti():
-    items = _load_json(LOST_ITEMS_FILE)
-    archive = _load_json(ARCHIVE_FILE)
+    items = _load_data(LOST_ITEMS_FILE, LOST_ITEMS_CSV)
+    archive = _load_data(ARCHIVE_FILE, ARCHIVE_CSV)
     today = datetime.now().date()
     remaining = []
     newly_archived = 0
@@ -117,8 +166,8 @@ def archivia_scaduti():
             newly_archived += 1
         else:
             remaining.append(item)
-    _save_json(ARCHIVE_FILE, archive)
-    _save_json(LOST_ITEMS_FILE, remaining)
+    _save_data(ARCHIVE_FILE, ARCHIVE_CSV, archive)
+    _save_data(LOST_ITEMS_FILE, LOST_ITEMS_CSV, remaining)
     return newly_archived
 
 
@@ -136,8 +185,8 @@ def archivia_oggetto(id_oggetto):
         The archived item if found, otherwise ``None``.
     """
 
-    items = _load_json(LOST_ITEMS_FILE)
-    archive = _load_json(ARCHIVE_FILE)
+    items = _load_data(LOST_ITEMS_FILE, LOST_ITEMS_CSV)
+    archive = _load_data(ARCHIVE_FILE, ARCHIVE_CSV)
     remaining = []
     archived_item = None
 
@@ -152,6 +201,6 @@ def archivia_oggetto(id_oggetto):
     if archived_item is None:
         return None
 
-    _save_json(ARCHIVE_FILE, archive)
-    _save_json(LOST_ITEMS_FILE, remaining)
+    _save_data(ARCHIVE_FILE, ARCHIVE_CSV, archive)
+    _save_data(LOST_ITEMS_FILE, LOST_ITEMS_CSV, remaining)
     return archived_item
