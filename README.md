@@ -67,3 +67,12 @@ Da qui si possono inserire nuovi oggetti, cercare tra quelli presenti e
 archiviare quelli scaduti. Dal menu laterale è ora disponibile anche la
 voce **Archivio** per consultare gli oggetti già archiviati e cercarli per
 ID, villa o nome del proprietario.
+
+
+## Installazione
+
+Per installare le dipendenze necessarie utilizzare:
+
+```bash
+pip install -r requirements.txt
+```
