@@ -42,6 +42,8 @@ CSV_FIELDS = [
     'data_ritrovamento',
     'ora_ritrovamento',
     'stato_notifica',
+    'descrizione',
+    'operatore',
     'data_scadenza',
     'proprietario',
     'ritirato',
@@ -101,9 +103,18 @@ def salva_immagine(path_foto):
     return dest_path
 
 
-def aggiungi_oggetto(villa, data_ritrovamento, ora_ritrovamento,
-                     stato_notifica, giorni_scadenza=30, proprietario=None,
-                     foto=None, logo=None):
+def aggiungi_oggetto(
+    villa,
+    data_ritrovamento,
+    ora_ritrovamento,
+    stato_notifica,
+    giorni_scadenza=30,
+    proprietario=None,
+    descrizione=None,
+    operatore=None,
+    foto=None,
+    logo=None,
+):
     """Create a lost item entry and persist it to disk."""
     items = _load_data(LOST_ITEMS_FILE, LOST_ITEMS_CSV)
     item_id = _next_id(villa, items)
@@ -116,6 +127,8 @@ def aggiungi_oggetto(villa, data_ritrovamento, ora_ritrovamento,
         'data_ritrovamento': data_ritrovamento,
         'ora_ritrovamento': ora_ritrovamento,
         'stato_notifica': stato_notifica,
+        'descrizione': descrizione,
+        'operatore': operatore,
         'data_scadenza': scadenza,
         'proprietario': proprietario,
         'ritirato': False,

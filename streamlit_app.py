@@ -19,7 +19,12 @@ if menu == "Aggiungi oggetto":
         data_r = st.date_input("Data di ritrovamento", value=date.today())
         ora_r = st.time_input("Ora di ritrovamento", value=datetime.now().time())
         stato = st.selectbox("Stato notifica", ["non_avvisato", "avvisato"])
-        proprietario = st.text_input("Proprietario (nome e cognome)")
+        descrizione = st.text_area("Descrizione")
+        operatore = st.text_input("Operatore")
+        if stato == "avvisato":
+            proprietario = st.text_input("Proprietario (nome e cognome)")
+        else:
+            proprietario = None
         foto = st.file_uploader("Foto", type=["jpg", "jpeg", "png"])
         submit = st.form_submit_button("Salva")
         if submit:
@@ -38,6 +43,8 @@ if menu == "Aggiungi oggetto":
                 stato_notifica=stato,
                 giorni_scadenza=giorni_scadenza,
                 proprietario=proprietario,
+                descrizione=descrizione,
+                operatore=operatore,
                 foto=foto_path,
             )
             st.success(f"Oggetto aggiunto con ID {item['id']}")
@@ -60,6 +67,8 @@ elif menu == "Lista oggetti":
                 "villa": i["villa"],
                 "data/ora ritrovamento": f"{i['data_ritrovamento']} {i['ora_ritrovamento']}",
                 "stato_notifica": i["stato_notifica"],
+                "descrizione": i.get("descrizione"),
+                "operatore": i.get("operatore"),
                 "proprietario": i.get("proprietario"),
                 "ritirato": i.get("ritirato"),
                 "archiviato": i.get("archiviato"),
@@ -121,6 +130,8 @@ else:
                 "villa": i["villa"],
                 "data/ora ritrovamento": f"{i['data_ritrovamento']} {i['ora_ritrovamento']}",
                 "stato_notifica": i["stato_notifica"],
+                "descrizione": i.get("descrizione"),
+                "operatore": i.get("operatore"),
                 "proprietario": i.get("proprietario"),
                 "ritirato": i.get("ritirato"),
                 "archiviato": i.get("archiviato"),
