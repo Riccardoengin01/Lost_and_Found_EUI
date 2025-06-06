@@ -142,3 +142,4 @@ index 5354a3da93909be3029ff73998762c3179e314c1..783204ed169f78665eda2fc39fae95d3
          st.markdown(df.to_markdown(index=False), unsafe_allow_html=True)
      else:
          st.write("Nessun oggetto archiviato trovato")
+
