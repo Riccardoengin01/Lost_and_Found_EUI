@@ -70,6 +70,7 @@ def aggiungi_oggetto(villa, data_ritrovamento, ora_ritrovamento,
         'ritirato': False,
         'data_ritiro': None,
         'ritirato_da': None,
+        'smaltito': False,
         'archiviato': False,
         'foto': foto_path,
         'logo': logo
@@ -111,6 +112,7 @@ def archivia_scaduti():
         scadenza = datetime.strptime(item['data_scadenza'], '%Y-%m-%d').date()
         if not item['ritirato'] and today > scadenza:
             item['archiviato'] = True
+            item['smaltito'] = True
             archive.append(item)
             newly_archived += 1
         else:
