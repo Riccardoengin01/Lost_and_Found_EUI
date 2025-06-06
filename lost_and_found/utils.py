@@ -120,3 +120,38 @@ def archivia_scaduti():
     _save_json(ARCHIVE_FILE, archive)
     _save_json(LOST_ITEMS_FILE, remaining)
     return newly_archived
+
+
+def archivia_oggetto(id_oggetto):
+    """Move a single item to the archive by ID without altering its data.
+
+    Parameters
+    ----------
+    id_oggetto : str
+        Identifier of the item to archive.
+
+    Returns
+    -------
+    dict | None
+        The archived item if found, otherwise ``None``.
+    """
+
+    items = _load_json(LOST_ITEMS_FILE)
+    archive = _load_json(ARCHIVE_FILE)
+    remaining = []
+    archived_item = None
+
+    for item in items:
+        if item["id"] == id_oggetto:
+            item["archiviato"] = True
+            archive.append(item)
+            archived_item = item
+        else:
+            remaining.append(item)
+
+    if archived_item is None:
+        return None
+
+    _save_json(ARCHIVE_FILE, archive)
+    _save_json(LOST_ITEMS_FILE, remaining)
+    return archived_item
