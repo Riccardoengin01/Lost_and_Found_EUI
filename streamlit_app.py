@@ -19,10 +19,7 @@ if menu == "Aggiungi oggetto":
         data_r = st.date_input("Data di ritrovamento", value=date.today())
         ora_r = st.time_input("Ora di ritrovamento", value=datetime.now().time())
         stato = st.selectbox("Stato notifica", ["non_avvisato", "avvisato"])
-        if stato == "avvisato":
-            proprietario = st.text_input("Nome dell'avvisato")
-        else:
-            proprietario = None
+        proprietario_input = st.text_input("Nome del notificato")
         descrizione = st.text_area("Descrizione")
         operatore = st.text_input("Operatore")
         foto = st.file_uploader("Foto", type=["jpg", "jpeg", "png"])
@@ -42,7 +39,7 @@ if menu == "Aggiungi oggetto":
                 ora_ritrovamento=ora_r.strftime("%H:%M"),
                 stato_notifica=stato,
                 giorni_scadenza=giorni_scadenza,
-                proprietario=proprietario,
+                proprietario=proprietario_input or None,
                 descrizione=descrizione,
                 operatore=operatore,
                 foto=foto_path,
@@ -72,7 +69,7 @@ elif menu == "Lista oggetti":
                 "proprietario": i.get("proprietario"),
                 "ritirato": i.get("ritirato"),
                 "archiviato": i.get("archiviato"),
-                "foto": f"[link]({i['foto']})" if i.get("foto") else "",
+                "foto": f"![]({i['foto']})" if i.get("foto") else "",
             }
             for i in items
         ])
@@ -135,7 +132,7 @@ else:
                 "proprietario": i.get("proprietario"),
                 "ritirato": i.get("ritirato"),
                 "archiviato": i.get("archiviato"),
-                "foto": f"[link]({i['foto']})" if i.get("foto") else "",
+                "foto": f"![]({i['foto']})" if i.get("foto") else "",
             }
             for i in items
         ])
