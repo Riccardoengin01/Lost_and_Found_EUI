@@ -55,7 +55,21 @@ utils.archivia_scaduti()
 Gli oggetti scaduti vengono aggiunti all'archivio con il campo
 `smaltito: true` per distinguerli da quelli ritirati.
 
-Per eseguire l'archiviazione giornaliera si può usare `daily_archive.py` con `schedule` o `cron`.
+La procedura di archiviazione quotidiana `daily_archive.py` può essere
+avviata manualmente con:
+
+```bash
+python -m lost_and_found.daily_archive
+```
+
+Per pianificarne l'esecuzione ogni giorno è possibile utilizzare `cron`
+o servizi analoghi. Ad esempio, per far partire lo script alle 00:05
+aggiungere al proprio `crontab`:
+
+```cron
+5 0 * * * /usr/bin/python -m lost_and_found.daily_archive
+```
+
 
 ### Interfaccia Streamlit
 
