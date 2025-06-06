@@ -69,6 +69,7 @@ def aggiungi_oggetto(villa, data_ritrovamento, ora_ritrovamento,
         'proprietario': proprietario,
         'ritirato': False,
         'data_ritiro': None,
+        'ritirato_da': None,
         'archiviato': False,
         'foto': foto_path,
         'logo': logo
@@ -78,7 +79,7 @@ def aggiungi_oggetto(villa, data_ritrovamento, ora_ritrovamento,
     return item
 
 
-def ritiro_oggetto(id_oggetto, data_ritiro):
+def ritiro_oggetto(id_oggetto, data_ritiro, ritirato_da):
     items = _load_json(LOST_ITEMS_FILE)
     archive = _load_json(ARCHIVE_FILE)
     remaining = []
@@ -87,6 +88,7 @@ def ritiro_oggetto(id_oggetto, data_ritiro):
         if item['id'] == id_oggetto:
             item['ritirato'] = True
             item['data_ritiro'] = data_ritiro
+            item['ritirato_da'] = ritirato_da
             item['archiviato'] = True
             archive.append(item)
             found_item = item

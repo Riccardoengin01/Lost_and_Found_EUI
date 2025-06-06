@@ -75,9 +75,14 @@ elif menu == "Lista oggetti":
     with st.form("ritiro"):
         id_ritiro = st.text_input("ID oggetto")
         data_r = st.date_input("Data ritiro", value=date.today())
+        ritirato_da = st.selectbox("Ritirato da", ["proprietario", "delegato"])
         submit_r = st.form_submit_button("Ritira")
         if submit_r and id_ritiro:
-            item = utils.ritiro_oggetto(id_ritiro, data_r.strftime("%Y-%m-%d"))
+            item = utils.ritiro_oggetto(
+                id_ritiro,
+                data_r.strftime("%Y-%m-%d"),
+                ritirato_da,
+            )
             if item:
                 st.success("Oggetto ritirato")
             else:
