@@ -69,6 +69,7 @@ def aggiungi_oggetto(villa, data_ritrovamento, ora_ritrovamento,
         'proprietario': proprietario,
         'ritirato': False,
         'data_ritiro': None,
+        'archiviato': False,
         'foto': foto_path,
         'logo': logo
     }
@@ -79,13 +80,23 @@ def aggiungi_oggetto(villa, data_ritrovamento, ora_ritrovamento,
 
 def ritiro_oggetto(id_oggetto, data_ritiro):
     items = _load_json(LOST_ITEMS_FILE)
+    archive = _load_json(ARCHIVE_FILE)
+    remaining = []
+    found_item = None
     for item in items:
         if item['id'] == id_oggetto:
             item['ritirato'] = True
             item['data_ritiro'] = data_ritiro
-            _save_json(LOST_ITEMS_FILE, items)
-            return item
-    return None
+            item['archiviato'] = True
+            archive.append(item)
+            found_item = item
+        else:
+            remaining.append(item)
+    if found_item is None:
+        return None
+    _save_json(ARCHIVE_FILE, archive)
+    _save_json(LOST_ITEMS_FILE, remaining)
+    return found_item
 
 
 def archivia_scaduti():
@@ -93,12 +104,15 @@ def archivia_scaduti():
     archive = _load_json(ARCHIVE_FILE)
     today = datetime.now().date()
     remaining = []
+    newly_archived = 0
     for item in items:
         scadenza = datetime.strptime(item['data_scadenza'], '%Y-%m-%d').date()
         if not item['ritirato'] and today > scadenza:
+            item['archiviato'] = True
             archive.append(item)
+            newly_archived += 1
         else:
             remaining.append(item)
     _save_json(ARCHIVE_FILE, archive)
     _save_json(LOST_ITEMS_FILE, remaining)
-    return len(archive)
+    return newly_archived
