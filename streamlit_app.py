@@ -19,12 +19,12 @@ if menu == "Aggiungi oggetto":
         data_r = st.date_input("Data di ritrovamento", value=date.today())
         ora_r = st.time_input("Ora di ritrovamento", value=datetime.now().time())
         stato = st.selectbox("Stato notifica", ["non_avvisato", "avvisato"])
-        descrizione = st.text_area("Descrizione")
-        operatore = st.text_input("Operatore")
         if stato == "avvisato":
-            proprietario = st.text_input("Proprietario (nome e cognome)")
+            proprietario = st.text_input("Nome dell'avvisato")
         else:
             proprietario = None
+        descrizione = st.text_area("Descrizione")
+        operatore = st.text_input("Operatore")
         foto = st.file_uploader("Foto", type=["jpg", "jpeg", "png"])
         submit = st.form_submit_button("Salva")
         if submit:
