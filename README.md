@@ -71,7 +71,7 @@ ID, villa o nome del proprietario.
 
 ## Installazione
 
-Per installare le dipendenze necessarie utilizzare:
+Per installare le dipendenze necessarie, inclusa `tabulate`, utilizzare:
 
 ```bash
 pip install -r requirements.txt
