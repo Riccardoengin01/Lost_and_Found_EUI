@@ -90,6 +90,7 @@ def _next_id(villa, items):
 
 
 def salva_immagine(path_foto):
+    """Save a provided photo in the local ``FOTO_DIR`` and return its path."""
     if not path_foto:
         return None
     if not os.path.exists(FOTO_DIR):
@@ -103,6 +104,7 @@ def salva_immagine(path_foto):
 def aggiungi_oggetto(villa, data_ritrovamento, ora_ritrovamento,
                      stato_notifica, giorni_scadenza=30, proprietario=None,
                      foto=None, logo=None):
+    """Create a lost item entry and persist it to disk."""
     items = _load_data(LOST_ITEMS_FILE, LOST_ITEMS_CSV)
     item_id = _next_id(villa, items)
     scadenza = (datetime.strptime(data_ritrovamento, '%Y-%m-%d') +
@@ -130,6 +132,7 @@ def aggiungi_oggetto(villa, data_ritrovamento, ora_ritrovamento,
 
 
 def ritiro_oggetto(id_oggetto, data_ritiro, ritirato_da):
+    """Mark an item as collected and move it to the archive."""
     items = _load_data(LOST_ITEMS_FILE, LOST_ITEMS_CSV)
     archive = _load_data(ARCHIVE_FILE, ARCHIVE_CSV)
     remaining = []
@@ -152,6 +155,7 @@ def ritiro_oggetto(id_oggetto, data_ritiro, ritirato_da):
 
 
 def archivia_scaduti():
+    """Archive all items whose expiry date has passed."""
     items = _load_data(LOST_ITEMS_FILE, LOST_ITEMS_CSV)
     archive = _load_data(ARCHIVE_FILE, ARCHIVE_CSV)
     today = datetime.now().date()
@@ -172,18 +176,7 @@ def archivia_scaduti():
 
 
 def archivia_oggetto(id_oggetto):
-    """Move a single item to the archive by ID without altering its data.
-
-    Parameters
-    ----------
-    id_oggetto : str
-        Identifier of the item to archive.
-
-    Returns
-    -------
-    dict | None
-        The archived item if found, otherwise ``None``.
-    """
+    """Archive a single item by ID without altering its data."""
 
     items = _load_data(LOST_ITEMS_FILE, LOST_ITEMS_CSV)
     archive = _load_data(ARCHIVE_FILE, ARCHIVE_CSV)
