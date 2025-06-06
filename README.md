@@ -87,8 +87,12 @@ ID, villa o nome del proprietario.
 
 ## Installazione
 
-Per installare le dipendenze necessarie, inclusa `tabulate`, utilizzare:
+Per installare il pacchetto completo di tutte le dipendenze è sufficiente
+clonare questo repository ed eseguire:
 
 ```bash
-pip install -r requirements.txt
+pip install .
 ```
+
+Questo comando installerà il modulo `lost_and_found` e tutte le librerie
+necessarie elencate nel file `pyproject.toml`.
