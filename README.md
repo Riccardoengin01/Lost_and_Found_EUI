@@ -6,7 +6,7 @@ VS, BF, BT, VF e LP.
 ## Funzionalità principali
 
 - Aggiungi un oggetto smarrito specificando il nome del proprietario
-- Segna un oggetto come ritirato
+- Segna un oggetto come ritirato specificando chi lo ha prelevato
 - Archivia automaticamente gli oggetti scaduti in base alla loro data di
   scadenza
 - Gestione delle foto
@@ -42,7 +42,7 @@ utils.aggiungi_oggetto(
 # utils.archivia_scaduti()
 
 # Segna ritiro
-utils.ritiro_oggetto("001-VS", "2025-01-15")
+utils.ritiro_oggetto("001-VS", "2025-01-15", "proprietario")
 
 # Archivia scaduti
 utils.archivia_scaduti()
